@@ -2111,8 +2111,16 @@ export function IssueDetail({ issueId, onDelete, onDone, defaultSidebarOpen = tr
               )
             )}
 
-            {/* Bottom comment input — no avatar, full width */}
-            <div className="mt-4">
+            {/* Bottom comment input — no avatar, full width.
+                Docked as a sticky footer so it stays reachable while
+                scrolling a long thread. It's a real DOM child of the
+                scroll container (not inside the virtualized list, which
+                uses the same element as customScrollParent), so
+                `position: sticky` resolves against that scroller. The
+                negative `-mx-8` cancels the content column's px-8 so the
+                bar's background/border bleed edge-to-edge; pb honours the
+                mobile safe-area inset. */}
+            <div className="sticky bottom-0 z-10 -mx-8 mt-4 border-t border-border bg-background px-8 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
               {/* key={id}: web's /issues/[id] route doesn't remount on
                   issueId change, so without an explicit key the editor
                   keeps the previous issue's in-memory content and the
